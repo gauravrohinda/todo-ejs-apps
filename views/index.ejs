@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css">
+</head>
+<body>
+    <% if (messages.error && messages.error.length > 0) { %>
+        <div id="flash" class="bg-red-500 text-white text-center p-2 rounded mb-4">
+          <%= messages.error[0] %>
+        </div>
+      <% } %>
+      
+      <% if (messages.success && messages.success.length > 0) { %>
+        <div id="flash" class="bg-green-500 text-white text-center p-2 rounded mb-4">
+          <%= messages.success[0] %>
+        </div>
+      <% } %>
+      
+      <!-- Add Todo Form -->
+      <div class="bg-white p-6 rounded shadow-md mb-6">
+          <form action="/add" method="POST" class="flex flex-col md:flex-row gap-4">
+              <input type="text" name="task" placeholder="Enter new task..." class="border p-2 flex-1 rounded" required>
+              <select name="priority" class="border p-2 rounded" required>
+                  <option value="">Priority</option>
+                  <option value="High">🔥 High</option>
+                  <option value="Medium">⚡ Medium</option>
+                  <option value="Low">🌿 Low</option>
+              </select>
+              <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded">
+                  Add Task
+              </button>
+          </form>
+      </div>
+      
+      <!-- Todo List -->
+      <div class="grid gap-4">
+          <% if (todos.length === 0) { %>
+              <p class="text-center text-gray-500">No tasks found. Add your first task!</p>
+          <% } %>
+      
+          <% todos.forEach(todo => { %>
+              <div class="bg-white p-4 rounded shadow-md flex flex-col md:flex-row justify-between items-center">
+                  <div class="flex flex-col md:flex-row items-center gap-4">
+                      <span class="<%= todo.completed ? 'line-through text-gray-400' : '' %> font-medium">
+                          <%= todo.task %> 
+                      </span>
+                      <span class="text-sm px-2 py-1 rounded 
+                          <%= todo.priority === 'High' ? 'bg-red-200 text-red-700' : 
+                              todo.priority === 'Medium' ? 'bg-yellow-200 text-yellow-700' : 
+                              'bg-green-200 text-green-700' %>">
+                          <%= todo.priority %>
+                      </span>
+                  </div>
+      
+                  <div class="flex gap-2 mt-2 md:mt-0">
+                      <% if (!todo.completed) { %>
+                          <form action="/complete/<%= todo._id %>" method="POST">
+                              <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                  Complete
+                              </button>
+                          </form>
+                      <% } %>
+                      <form action="/delete" method="POST">
+                          <input type="hidden" name="id" value="<%= todo._id %>">
+                          <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+                              Delete
+                          </button>
+                      </form>
+                  </div>
+              </div>
+          <% }); %>
+      </div>
+      
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css">
+</head>
+<body>
+    <div class="container mx-auto my-10">
+        <h1 class="text-3xl font-bold">Edit Task</h1>
+
+        <!-- Edit Task Form -->
+        <form action="/edit" method="POST" class="mt-5">
+            <!-- Include the task ID to identify which task to update -->
+            <input type="hidden" name="id" value="<%= todo._id %>">
+            <input type="text" name="task" class="border p-2 w-1/2" value="<%= todo.task %>" required>
+            <input type="date" name="date" class="border p-2 ml-2" value="<%= todo.date.toISOString().split('T')[0] %>" required>
+            <button type="submit" class="bg-blue-500 text-white p-2 ml-2">Update Task</button>
+        </form>
+    </div>
+</body>
+</html>
